@@ -1,8 +1,6 @@
 # Rust Sandbox
 
-[Rust Tutorial - Tech With Tim](https://www.youtube.com/watch?v=T_KrYLW4jw8&list=PLzMcBGfZo4-nyLTlSRBvo0zjSnCnqjHYQ)
-
-Left off here: https://www.youtube.com/watch?v=xYgfW8cIbMA
+Learning Rust, following along with [The Book](https://doc.rust-lang.org/stable/book).
 
 ## Compile
 
