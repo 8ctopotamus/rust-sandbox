@@ -13,6 +13,7 @@ impl Rectangle {
         }
     }
 
+    #[allow(dead_code)]
     // methods (have self as a param)
     fn area(&self) -> u32 {
         &self.width * &self.height
