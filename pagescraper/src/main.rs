@@ -2,12 +2,13 @@ use std::fs::OpenOptions;
 use std::io::{Write};
 use reqwest;
 use scraper::{Html, Selector};
-
-let url = "https://www.country-codes.org/us-area-codes";
-let output_path = "area-codes.csv";
+use serde::{Deserialize, Serialize}; 
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let url = "https://www.country-codes.org/us-area-codes";
+    let output_path = "area-codes.csv";
+
     let html = reqwest::get(url)
         .await?
         .text()
@@ -23,7 +24,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .write(true)
         .truncate(true)
         .create(true)
-        .open()
+        .open(output_path)
         .expect("Unable to open file");
 
     for element in area_codes {
@@ -32,14 +33,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .collect::<String>();
         
         // println!("{:#?}", area_code);
-
-        area_code.push_str("\n");
         
         // file.write_all(area_code.as_bytes()).expect("Unable to append data");
         writeln!(file, "{}", area_code);
     }
 
-    println("")
+    println!("File generated!");
 
     Ok(())
 }
