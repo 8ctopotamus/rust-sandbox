@@ -18,7 +18,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let document = Html::parse_document(&html);
     let area_codes_selector = Selector::parse(".area-code-badge strong").unwrap();
-    let area_codes =  document.select(&area_codes_selector);
+    let area_code_elements =  document.select(&area_codes_selector);
 
     let mut file = OpenOptions::new()
         .write(true)
@@ -27,16 +27,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .open(output_path)
         .expect("Unable to open file");
 
-    for element in area_codes {
-        let mut area_code = element
+    let mut area_codes = Vec::new();
+
+    for element in area_code_elements {
+        let area_code = element
             .text()
-            .collect::<String>();
-        
-        // println!("{:#?}", area_code);
-        
-        // file.write_all(area_code.as_bytes()).expect("Unable to append data");
-        writeln!(file, "{}", area_code);
+            .collect::<String>();        
+        area_codes.push(area_code)
     }
+
+    area_codes.sort_by(|a, b| a.cmp(&b));
+
+    // println!("{:#?}", area_codes);
+
+    let serialized_area_codes = serde_json::to_string(&area_codes).unwrap();
+    let area_codes_bytes = serialized_area_codes.as_bytes();
+        
+    file.write_all(area_codes_bytes).expect("Unable to append data");
 
     println!("File generated!");
 
